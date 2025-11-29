@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>DIS Files</title>
+  <link href="drpython.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<p>
+<a href="help.html">Back to DrPython Help</a>
+</p>
+
+<h1>DIS Files</h1>
+
+
+<p>A DIS file is a DrPython Icon Set.
+</p>
+
+<p>
+The format used is PNG.
+</p>
+
+<p>
+Here is an example.
+</p>
+
+<pre>
+&lt;close&gt;fileclose.png&lt;/close&gt;
+&lt;debug&gt;finish.png&lt;/debug&gt;
+&lt;end&gt;exit.png&lt;/end&gt;
+&lt;find&gt;find.png&lt;/find&gt;
+&lt;new&gt;filenew.png&lt;/new&gt;
+&lt;open&gt;fileopen.png&lt;/open&gt;
+&lt;prefs&gt;wizard.png&lt;/prefs&gt;
+&lt;printfile&gt;fileprint.png&lt;/printfile&gt;
+&lt;printprompt&gt;filequickprint.png&lt;/printprompt&gt;
+&lt;prompt&gt;view_bottom.png&lt;/prompt&gt;
+&lt;python&gt;&lt;/python&gt;
+&lt;reload&gt;reload.png&lt;/reload&gt;
+&lt;replace&gt;filefind.png&lt;/replace&gt;
+&lt;run&gt;1rightarrow.png&lt;/run&gt;
+&lt;save&gt;filesave.png&lt;/save&gt;
+&lt;setargs&gt;2rightarrow.png&lt;/setargs&gt;
+&lt;whitespace&gt;showmenu.png&lt;/whitespace&gt;
+</pre>
+
+<p>
+Pretty straight forward at first glance. But why settle with something simple
+when we can just as easily make it complicated?
+</p>
+
+<p>
+Let's say you want to store your <tt>.png</tt> files in the directory
+<tt>/home/user/drpythonthemes/drcool/</tt>. You put the <tt>*.dis</tt> file in
+this directory. Then, you create two directories, <tt>16</tt> and <tt>24</tt>.
+</p>
+
+<p>
+Put 16x16 images in <tt>16</tt>, 24x24 in <tt>24</tt>. Make sure they have the
+same filenames.
+</p>
+
+<p>
+Then, simply put the filename of choice between the tags for the ToolBar item
+you wish to load that particular file.
+</p>
+
+<p>
+For example:
+</p>
+
+<p>
+<tt>/home/user/drpythonthemes/drcool/drcool.dis</tt><br>
+<tt>/home/user/drpythonthemes/drcool/16/forward_arrow.png</tt><br>
+<tt>/home/user/drpythonthemes/drcool/24/forward_arrow.png</tt><br>
+</p>
+
+<p>
+Your <tt>.dis</tt> file will read:
+</p>
+
+<pre>
+&lt;run&gt;forward_arrow&lt;/run&gt;
+</pre>
+
+<p>
+Leaving out a tag or leaving it blank will tell DrPython to load the default
+icon for that ToolBar item.
+</p>
+
+<p>
+If you decide to leave out either the <tt>16</tt> or the <tt>24</tt> directory,
+DrPython will load the default icons for that size.
+</p>
+
+<p>
+<a href="help.html">Back to DrPython Help</a>
+</p>
+
+</body>
+</html>

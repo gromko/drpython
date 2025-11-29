@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>DrScript</title>
+  <link href="drpython.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<p>
+<a href="help.html">Повернутися до довідки DrPython</a>
+</p>
+
+<h1>DrScript</h1>
+
+<p>
+DrScript частково натхненний Script-Fu у The Gimp (дуже потужна програма для редагування зображень з відкритим кодом, яка використовується для зображень у DrPython).
+</p>
+
+<p>
+Ви можете додати будь-який Python-файл до меню DrPython у розділі DrScript. Просто виберіть "Додати існуючий скрипт".
+</p>
+
+<p>
+Щоб почати з нуля, виберіть "Додати новий скрипт", щоб додати новий скрипт до меню, а потім відкрийте його для редагування. (Вам потрібно буде вибрати ім'я файлу).
+</p>
+
+<p>
+Щоб додати команду оболонки, виберіть "Додати команду оболонки". Зверніть увагу, що:
+</p>
+
+<ul>
+  <li><i>Поточний каталог</i> замінюється на каталог поточного відкритого файлу.
+  </li>
+  <li>
+    <i>Поточний файл</i> замінюється на поточний відкритий файл.
+  </li>
+  <li>
+    <i>Поточний файл</i> можна використовувати лише як аргумент.
+  </li>
+  <li>
+    Ви можете або запустити команду у командному рядку (за замовчуванням), або використовувати wx.Shell().
+  </li>
+</ul>
+
+<p>
+Ви можете вибрати "Динамічний DrScript" з меню, щоб ввести DrScript негайно (без збереження у файл). Динамічні DrScript обробляються так само, як і збережені DrScript.
+</p>
+
+<p>
+Якщо ви вибираєте "Додати новий скрипт" або "Додати існуючий скрипт", вам потрібно вибрати назву для вашого скрипта. Це те, що ви побачите у підменю DrScript.
+</p>
+
+<p>
+Ви також можете переміщувати скрипти у меню після їх додавання. (Переміщення скриптів оновлює та зберігає всі ваші скорочення.)
+</p>
+
+<p>
+Коли скорочення додані до меню, їх можна побачити у діалоговому вікні налаштування скорочень, і ви можете призначити клавіші для ваших власних скриптів.
+</p>
+
+<p>
+Тепер ви готові писати скрипти! Рекомендується зробити перший рядок таким:
+</p>
+
+<pre>
+#drscript
+</pre>
+
+<p>
+просто для нагадування.
+</p>
+
+<p>
+Тепер давайте розглянемо приклад DrScript. Припустимо, ви хочете написати скрипт, який додає "з качками" до виділеного тексту.
+</p>
+
+<pre>
+#drscript
+DrDocument.SetSelectedText(DrDocument.GetSelectedText() + <span style="color: rgb(0, 102, 0);">" з качками!"</span>)
+</pre>
+
+<span style="color: rgb(51, 51, 51); font-style: italic;">#drscript</span><br>
+<br>
+<span style="color: rgb(0, 0, 0);">DrDocument.SetSelectedText</span><span
+ style="font-weight: bold;">(</span>DrDocument.GetSelectedText()
+<span style="font-weight: bold;">+</span> <span
+ style="color: rgb(0, 102, 0);">" з качками!"</span><span
+ style="font-weight: bold;">)</span><br>
+<br>
+
+<p>
+Спочатку давайте подивимося, що робить цей скрипт. Припустимо, я виділяю текст "Філософ ділиться своїм одкровенням". Потім я вибираю "Додати з качками" з підменю DrScript. І вуаля! Тепер текст звучить як "Філософ ділиться своїм одкровенням з качками!"
+</p>
+
+<p>
+Повернемося до програми. DrPython виконує код у DrScript так, ніби він був написаний у вихідному коді DrPython! Різниця в тому, що DrPython розпізнає спеціальні ключові слова.
+</p>
+
+<p>
+Ви можете вибирати з:
+</p>
+
+<table>
+<tbody>
+  <tr>
+    <td>DrFrame</td>
+    <td>надає доступ до внутрішніх компонентів DrPython (DrFrame)</td>
+  </tr>
+  <tr>
+    <td>DrScript</td>
+    <td>об'єкт wxObject, приєднаний до DrFrame, для зберігання постійних змінних.</td>
+  </tr>
+  <tr>
+    <td>DrFilename</td>
+    <td>поточне ім'я файлу (активної вкладки, якщо в режимі MDI)</td>
+  </tr>
+  <tr>
+    <td>DrDocument</td>
+    <td>надає доступ до Document wxStyledTextControl</td>
+  </tr>
+  <tr>
+    <td>DrPrompt</td>
+    <td>надає доступ до Prompt wxStyledTextControl</td>
+  </tr>
+</table>
+
+<p>
+Ви можете вибрати DrFrame з кількох причин. Якщо вам потрібен діалог, все, що вам потрібно зробити, це:
+</p>
+
+<pre>
+wxTextEntryDialog<b>(</b>DrFrame, <span
+style="color: rgb(0, 102, 0);">"Що замінити?:"</span>, <span
+style="color: rgb(0, 102, 0);">"Замінити все у виділеному"</span>, <span 
+style="color: rgb(0, 102, 0);">""</span><b>)</b>
+</pre>
+
+<p>
+Іншими словами, це ідеально підходить для функцій, які вимагають wxFrame як аргумент.
+</p>
+
+<p>
+Ви також можете отримати доступ до внутрішніх компонентів DrPython.
+</p>
+
+<pre>
+Frame.txtDocument.GetTextLength<b>()</b>
+</pre>
+
+<p>
+Звичайно, ви також можете написати:
+</p>
+
+<pre>
+DrDocument.GetTextLength<b>()</b>
+</pre>
+
+
+<p>Тепер, якщо ви хочете встановити змінну в одному скрипті, а потім використовувати її в іншому, ви можете написати:
+</p>
+
+<pre>
+<span style="color: rgb(51, 51, 51); font-style: italic;">#drscript</span>
+<span style="color: rgb(51, 51, 51); font-style: italic;">#SetWhoRoars</span>
+<span style="color: rgb(0, 0, 0);">
+<span style="font-weight: bold;">import</span> wx</span>
+
+d = wx.TextEntryDialog(DrFrame, "Хто реве?", "Визначити, хто реве", "")
+if (d.ShowModal() == wx.ID_OK):
+    DrScript.WhoRoars = d.GetValue()
+</pre>
+
+<pre>
+<span style="color: rgb(51, 51, 51); font-style: italic;">#drscript</span>
+<span style="color: rgb(51, 51, 51); font-style: italic;">#AddRoar</span>
+
+<span style="font-weight: bold;"></span><span
+ style="color: rgb(255, 0, 0);"></span>if DrScript.VariableExists(<span
+ style="color: rgb(0, 102, 0);">"WhoRoars"</span>):
+    DrDocument.SetSelectedText(DrDocument.GetSelectedText() + <span
+ style="color: rgb(0, 102, 0);">" реве "</span> + DrScript.WhoRoars)
+else:
+    DrDocument.SetSelectedText(DrDocument.GetSelectedText() + <span
+ style="color: rgb(0, 102, 0);">" реве Миша")</span>
+</pre>
+
+<p>
+Ви також можете встановити текст для Prompt або Document. Наприклад:
+</p>
+
+<pre>
+<span style="color: rgb(51, 51, 51); font-style: italic;">#drscript</span>
+<span style="color: rgb(51, 51, 51); font-style: italic;">#AddWithDucks</span>
+
+DrPrompt.SetText<span style="font-weight: bold;">(</span>DrDocument.GetSelectedText()<span
+ style="font-weight: bold;">+</span> <span
+ style="color: rgb(0, 102, 0);">" з качками!"</span><span
+ style="font-weight: bold;">)</span>
+</pre>
+
+<p>
+Цей код встановить текст у командному рядку на виділений текст документа плюс рядок "з качками!".
+</p>
+
+<p>
+<a href="help.html">Повернутися до довідки DrPython</a>
+</p>
+</body>
+</html>

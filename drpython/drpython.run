@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /opt/drpython
+python3 drpython.py "$@" 2>/dev/null

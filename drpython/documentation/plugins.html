@@ -1,0 +1,797 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Доповнення (plugins)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="drpython.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<p>
+<a href="help.html">Повернутися до довідки drPython</a>
+</p>
+<h1>Доповнення</h1>
+<p>
+Доповнення надають спосіб додавання нової функціональності до drPython.
+</p>
+<h2>Встановлення готових доповнень</h2>
+<p>
+Примітка:
+</p>
+<ul>
+  <li> Доповнення не завантажуються під час встановлення drPython. </li>
+  <li> Деякі доповнення не можуть бути індексовані. Вони можуть бути завантажені лише під час запуску програми. </li>
+</ul>
+<p>
+У вас є два варіанти для встановлення доповнень.
+</p>
+<h3>1. Використовуйте майстер</h3>
+<p>
+Виберіть "Встановити доповнення" з меню "Налаштування доповнень" (під пунктом "Налаштування"). Ви можете вибрати завантажене доповнення для встановлення з локального носія.
+</p>
+<p>
+Під час встановлення вам буде запропоновано вибрати, які доповнення:
+</p>
+<ul>
+  <li> <b>Завантажувати за замовчуванням</b> (Ці доповнення будуть завантажуватися під час запуску. Вони розміщуються в індексі за замовчуванням [default.idx].) </li>
+  <li> <b>Завантажувати з індексу</b> (Якщо підтримується (тут будуть перераховані лише доповнення, що підтримують індексацію), ці доповнення індексуються. Ви можете потім вибрати їх з підменю опцій "Завантажити пдоповнення з індексу".) </li>
+</ul>
+<h3>2. Встановлення з Py</h3>
+<p>
+Якщо ви створюєте своє власне доповнення або маєте файли доповнення у розпакованому форматі, просто знайдіть основний файл доповнення (<tt><i>НазваДоповнення</i>.py</tt>), і drPython зробить решту.
+</p>
+<h2>Налаштування доповнення</h2>
+<p>
+Ви можете (через Налаштування > Налаштування доповнень) редагувати вихідний код доповнення або створювати/редагувати/видаляти індексні файли, які є просто списками доповнень для завантаження при активації.
+</p>
+<p>
+Ви можете редагувати налаштування доповнення через меню налаштувань доповнення.
+</p>
+<p>
+Ви можете редагувати скорочення або додавати елементи до контекстного меню або панелі інструментів через стандартні діалоги для всіх доповнень, які підтримують кожну функцію.
+</p>
+<p>
+Усі зміни у вихідному коді доповнення набувають чинності під час наступного завантаження drPython. Сполучення клавіш, налаштування тощо або негайно набувають чинності, або після перезавантаження, залежно від доповнення.
+</p>
+<p>
+Якщо доповнення не завантажено, ви все ще можете редагувати сполучення клавіш та контекстне меню, але ви не зможете отримати доступ до функцій доповнення, доки воно не буде завантажено.
+</p>
+<h2>Видалення доповнення</h2>
+<p>
+Просто запустіть майстер видалення.
+</p>
+<h2>Створення власних доповнень</h2>
+<p>
+ПРИМІТКА: Якщо ви пишете своє власне доповнення, зверніть увагу, що ви можете отримати доступ до всієї програми drPython (через екземпляр DrFrame). Це означає, що доповнення може зробити щось неправильно або отримати доступ до внутрішньої функції, яка може бути змінена у майбутніх релізах. Якщо ви додаєте новий компонент (наприклад, новий пункт меню та новий діалог), усе буде добре.
+</p>
+<h3>Правила іменування</h3>
+<p>
+Якщо ви хочете поширити своє доповнення під назвою <tt><i>НазваДоповнення</i></tt>, переконайтеся, що:
+</p>
+<ol>
+  <li> Усі необхідні файли знаходяться у zip-файлі: <tt><i>НазваДоповнення</i>-<i>Версія</i>.zip</tt> </li>
+  <li> Основний файл доповнення називається: <tt><i>НазваДоповнення</i>.py</tt> </li>
+  <li> Скрипт встановлення, якщо він є, називається <tt><i>НазваДоповнення</i>.py.install</tt> </li>
+  <li> Індексний файл, якщо він є, називається: <tt><i>НазваДоповнення</i>.idx</tt> </li>
+</ol>
+<p>
+Перше, що вам потрібно зробити, це імпортувати відповідні модулі wxWidgets (зазвичай лише "wx").
+</p>
+<pre><span style="font-weight: bold;">import </span>wx<br></pre>
+<p>
+Далі вам потрібно визначити функцію "Plugin".
+</p>
+<pre><span style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">Plugin</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br></pre>
+<p>
+DrFrame — це змінна для DrFrame у програмі drPython. Це та сама змінна, що й у DrScript.
+</p>
+<p>
+Тепер ви можете додати щось до інтерфейсу, просто використовуючи базовий код у drPython. Щоб прив'язати функцію до події, є два способи. Розглянемо наступний код.
+</p>
+<pre><span style="color: rgb(51, 153, 153); font-style: italic;">#Приклад<br>Доповнення</span>
+
+<span style="font-weight: bold;">import</span> wx<br><br><span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">Plugin</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br>
+    idum <span
+ style="font-weight: bold;">=</span> DrFrame.GetNewId<span
+ style="font-weight: bold;">()</span>
+
+    DrFrame.viewmenu.Append<span
+ style="font-weight: bold;">(</span>idum, <span
+ style="color: rgb(0, 102, 0);">"Подивись!"</span>,<span
+ style="color: rgb(0, 102, 0);">" Я сказав Подивись!"</span><span
+ style="font-weight: bold;">)</span>
+
+    <span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">exampleFunction</span><span
+ style="font-weight: bold;">(</span>event<span
+ style="font-weight: bold;">)</span>:<br>        DrFrame.ShowPrompt()<br>        DrFrame.txtPrompt.SetText(<span
+ style="color: rgb(0, 102, 0);">"Я дивлюсь.... Що далі?"</span>)<br><br>    DrFrame.Bind<span
+ style="font-weight: bold;">(</span>wx.EVT_MENU, exampleFunction, id=idum<span
+ style="font-weight: bold;">)</span>
+
+    DrFrame.AddToPopUpMenu<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 153, 0);"><span
+ style="color: rgb(0, 102, 0);">"Подивись!", </span></span>exampleFunction<span
+ style="color: rgb(0, 153, 0);"><span style="color: rgb(0, 0, 0);">, 0</span><span
+ style="font-weight: bold; color: rgb(0, 0, 0);">)</span></span>
+
+    DrFrame.AddSeparatorToPopUpMenu<span
+ style="font-weight: bold;">(</span><span
+ style="color: rgb(51, 51, 255);">1</span><span
+ style="font-weight: bold;">)</span>
+</pre>
+<p>
+Що робить цей код: він додає елемент до меню Перегляд (ви можете отримати назви меню, переглянувши вихідний код DrPython: <tt>drpython.py</tt>). DrFrame.GetNewId() забезпечує повернення унікального ідентифікатора. (Вам потрібен ідентифікатор лише якщо компонент wx, який ви додаєте, вимагає його. Вам потрібен ідентифікатор для меню).
+</p>
+<p>
+Другий крок до додавання меню — використання функції DrFrame. Є два необхідні кроки. Перший — визначити функцію. Якщо ця функція буде отримувати доступ до DrFrame, вона повинна бути визначена в межах функції Plugin (яка викликається лише один раз, коли доповнення завантажується).
+</p>
+<p>
+Функція, яку ви додаєте, повинна приймати один аргумент, <tt>event</tt>. Ви можете називати їх як завгодно. Наприклад, <tt>MenuEvent</tt>, другий буде містити подію меню wx.
+</p>
+<p>
+Далі ви повинні використовувати метод wxPython Bind(), щоб прив'язати цю функцію до компонента, який ви хочете. Зверніться до документації wxPython для використання. Ось короткий опис Bind().
+</p>
+<p>
+<tt>wxPythonWidget.Bind(wx.EVT_EVENTTYPE, Function, id=IdNumber).</tt>
+<br>
+Аргумент idNumber є необов'язковим (рекомендується, якщо тип події дозволяє це, перевірте документацію wxWidgets для отримання додаткової інформації). <tt>wx.EVT_EVENTTYPE</tt> — це тип події (документація wxWidgets містить список). Function — це функція, яку ви прив'язуєте до віджета.
+</p>
+<hr>
+<p>Щоб дозволити drPython надати користувачу доступ до функції через клавіатурні скорочення, контекстне меню або панель інструментів, у вас є кілька варіантів. Ви можете вказати кожен окремо (або вибрати лише один або два методи), або ви можете вказати всі відразу.
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddPluginFunction</span>(НазваПоточногоПлагіна, МіткаФункції, ФункціяЯкуВиХочетеДодати)<br></pre>
+<p>
+Ось короткий приклад коду.
+</p>
+<pre>DrFrame.AddPluginShortcutFunction<span style="font-weight: bold;">(</span><span
+ style="color: rgb(0, 102, 0);">"SearchInFiles"</span>, <span
+ style="color: rgb(0, 102, 0);">"Знайти у файлах"</span>, OnFindInFiles<span
+ style="font-weight: bold;">)</span>
+</pre>
+<p>
+Це дозволить користувачу додати функцію OnFindInFiles до клавіатурних скорочень, контекстного меню або панелі інструментів.
+</p>
+<p>
+Для отримання додаткової інформації про те, що це означає для кожного методу, див. нижче.
+</p>
+<hr>
+<p>Щоб додати сполучення клавіш, у вас є два варіанти. Ви можете просто використовувати "AddKeyEvent". Він приймає наступні аргументи.
+</p>
+<pre><span style="font-weight: bold;">DrFrame.AddKeyEvent</span>(ФункціяЯкуВиХочетеДодати, КодКлавіші, Control, Shift, Alt, Meta)<br></pre>
+<p>
+За замовчуванням для всіх модифікаторів (Control, Shift, Alt, Meta) встановлено значення 0 (не використовувати).
+</p>
+<p>
+Коди клавіш можуть бути складними. Для малих та великих літер використовуйте функцію Python <tt>ord()</tt> плюс велику літеру. Додайте Shift=1, якщо ви хочете використовувати велику літеру.
+</p>
+<p>
+<b>Ціль</b>: Велика літера 'A'
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddKeyEvent</span>(ФункціяЯкуВиХочетеДодати, ord('A'), 0, 1)<br></pre>
+<p>
+<b>Ціль</b>: Мала літера 'a'
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddKeyEvent</span>(ФункціяЯкуВиХочетеДодати, ord('A'))<br></pre>
+<p>
+Це зробить скорочення постійним.
+</p>
+<p>
+Якщо ви хочете дозволити користувачу налаштувати сполучення клавіш:
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddPluginShortcutFunction</span>(НазваПоточногоПлагіна, МіткаФункції, ФункціяЯкуВиХочетеДодати)<br></pre>
+<p>
+Наприклад:
+</p>
+<pre><span style="color: rgb(51, 153, 153); font-style: italic;">#Приклад доповнення<br>#Цей файл називається "examplenumber2.py"</span>
+
+<span style="font-weight: bold;">import</span> wx<br><br><span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">Plugin</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br>
+    idum <span
+ style="font-weight: bold;">=</span> DrFrame.GetNewId<span
+ style="font-weight: bold;">()</span><span style="font-weight: bold;"></span>
+
+    DrFrame.viewmenu.Append<span
+ style="font-weight: bold;">(</span>idum, <span
+ style="color: rgb(0, 102, 0);">"Подивись!"</span>, <span
+ style="color: rgb(0, 102, 0);">" Я сказав Подивись!"</span><span
+ style="font-weight: bold;">)</span>
+
+ <span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">exampleFunction</span><span
+ style="font-weight: bold;">(</span>подія<span
+ style="font-weight: bold;">)</span>:<br> DrFrame.ShowPrompt()<br> DrFrame.txtPrompt.SetText(<span
+ style="color: rgb(0, 102, 0);">"Я шукаю... Що тепер?"</span>)<br><br> DrFrame.Bind<span
+ style="font-weight: bold;">(</span>wx.EVT_MENU, exampleFunction, id=idum<span
+ style="font-weight: bold;">)</span>
+
+ DrFrame.AddToPopUpMenu<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 153, 0);"><span
+ style="color: rgb(0, 102, 0);">"Подивіться!", </span></span>exampleFunction<span
+ style="color: rgb(0, 153, 0);"><span style="color: rgb(0, 0, 0);">, 0</span><span
+ style="font-weight: bold; color: rgb(0, 0, 0);">)</span></span>
+
+ DrFrame.AddSeparatorToPopUpMenu<span
+ style="font-weight: bold;">(</span><span
+ style="color: rgb(51, 51, 255);">1</span><span
+ style="font-weight: bold;">)</span>
+</pre>
+<p>
+Цей код робить наступне. Він додає елемент до меню перегляду
+(ви можете переглянути назви меню у коді drPython: <tt>drpython.py</tt>).
+DrFrame.GetNewId() забезпечує повернення унікального ідентифікаційного номера. (Тільки ти
+потрібен
+id номер, якщо компонент wx, який ви додаєте, вимагає його. Вам потрібен один
+для
+меню).
+</p>
+<p>
+Другим кроком до додавання меню є використання функції DrFrame. там
+два
+необхідні кроки. По-перше, це визначення функції. Якщо ця функція є
+йде
+щоб отримати доступ до DrFrame, його потрібно визначити у функції доповнення (яка
+є тільки
+викликається один раз, коли доповнення завантажується).
+</p>
+<p>
+Функція, яку ви додаєте, має приймати один аргумент, <tt>event</tt>
+назвіть їх
+все, що завгодно. Наприклад, <tt>MenuEvent</tt> буде зберігатися другий
+wx
+Меню Подія.
+</p>
+<p>
+Далі ви повинні використати метод wxPython Bind(), щоб прив’язати цю функцію
+в
+потрібний компонент. Зверніться до документації wxPython щодо використання. тут
+є a
+короткий опис Bind().
+</p>
+<p>
+<tt>wxPythonWidget.Bind(wx.EVT_EVENTTYPE, функція, id=IdNumber).</tt>
+<br>
+Аргумент idNumber необов’язковий (рекомендується, якщо тип події в
+запитання
+дозволяє, перевірте цю інформацію в документації wxWidgets).
+<tt>wx.EVT_EVENTTYPE</tt> – це тип події (документація wxWidgets
+для a
+список). Функція – це функція, яку ви прив’язуєте до віджета.
+</p>
+<hr>
+<p>Щоб повідомити DrPython дозволити користувачеві отримати доступ до функції з клавіатури
+ярлики,
+у спливаючому меню або панелі інструментів у вас є кілька варіантів. Ви можете вказати
+кожен
+окремо (або виберіть лише один або два методи), або ви можете вказати всі
+одразу.
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddPluginFunction</span>(NameOfTheCurrentPlugin, FunctionLabel, FunctionYouWantToAdd)<br></pre>
+<p>
+Ось короткий приклад коду.
+</p>
+<pre>DrFrame.AddPluginShortcutFunction<span style="font-weight: bold;">(</span><span
+ style="color: rgb(0, 102, 0);">"SearchInFiles"</span>, <span
+ style="color: rgb(0, 102, 0);">"Знайти у файлах"</span>, OnFindInFiles<span
+ style="font-weight: bold;">)</span>
+</pre>
+<p>
+Це дозволить користувачеві додати функцію OnFindInFiles до клавіатури
+ярлики,
+спливаюче меню або панель інструментів.
+</p>
+<p>
+Щоб дізнатися більше про те, що це означає для кожного методу, дивіться нижче.
+</p>
+<hr>
+<p>Щоб додати комбінацію клавіш, у вас є два варіанти. Ви можете просто використовувати
+"AddKeyEvent". Це вимагає наступних аргументів.
+</p>
+<pre><span style="font-weight: bold;">DrFrame.AddKeyEvent</span>(FunctionYouWantToAdd, Keycode, Control, Shift, Alt, Meta)<br></pre>
+<p>
+За замовчуванням для всіх клавіш-модифікаторів (Control, Shift, Alt, Meta) є 0 (do
+не використовувати).
+</p>
+<p>
+Коди клавіш можуть бути складними. Для малих та великих літер використовуйте функцію Python <tt>ord()</tt> разом із великою літерою. Додайте Shift=1, якщо ви хочете використовувати велику літеру.
+</p>
+<p>
+<b>Ціль</b>: Велика літера 'A'
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddKeyEvent</span>(ФункціяЯкуВиХочетеДодати, ord('A'), 0, 1)<br></pre>
+<p>
+<b>Ціль</b>: Мала літера 'a'
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddKeyEvent</span>(ФункціяЯкуВиХочетеДодати, ord('A'))<br></pre>
+<p>
+Це зробить скорочення постійним.
+</p>
+<p>
+Якщо ви хочете дозволити користувачеві налаштувати скорочення:
+</p>
+<pre><span style="font-weight: bold;">DrFrame.</span><span
+ style="font-weight: bold;">AddPluginShortcutFunction</span>(НазваПоточногоПлагіна, МіткаФункції, ФункціяЯкуВиХочетеДодати)<br></pre>
+<p>
+Наприклад:
+</p>
+<pre><span style="color: rgb(51, 153, 153); font-style: italic;">#Example Plugin<br>#This file is called "examplenumber2.py"</span>
+
+<span style="font-weight: bold;">import</span> wx<br><br><span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">Plugin</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br>
+    idum <span
+ style="font-weight: bold;">=</span> DrFrame.GetNewId<span
+ style="font-weight: bold;">()</span><span style="font-weight: bold;"></span>
+
+    DrFrame.viewmenu.Append<span
+ style="font-weight: bold;">(</span>idum, <span
+ style="color: rgb(0, 102, 0);">"Lookit!"</span>, <span
+ style="color: rgb(0, 102, 0);">" I said Lookit!"</span><span
+ style="font-weight: bold;">)</span>
+
+    <span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">exampleFunction</span><span
+ style="font-weight: bold;">(</span>event<span
+ style="font-weight: bold;">)</span>:<br>        DrFrame.ShowMessage<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 102, 0);">"I'm Looking Already!"</span>, <span
+ style="color: rgb(0, 102, 0);">"Result:"</span><span
+ style="font-weight: bold;">)</span>
+
+    DrFrame.Bind<span
+ style="font-weight: bold;">(</span>wx.EVT_MENU, exampleFunction, id=idum<span
+ style="font-weight: bold;">)</span>
+
+    DrFrame.AddPluginShortcutFunction<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 102, 0);">"examplenumber2"</span>, <span
+ style="color: rgb(0, 102, 0);">"Example Function"</span>, exampleFunction<span
+ style="font-weight: bold;">)</span>
+</pre>
+<p>
+Тепер ви можете відкрити діалогове вікно налаштування скорочень, вибрати доповнення "examplenumber2" і встановити скорочення для функції "exampleFunction", яку ви щойно додали.
+</p>
+<p>
+Зверніть увагу на використання функції ShowMessage.
+</p>
+<p>
+Функція ShowMessage викликає drScrolledMessageDialog.
+DrFrame.ShowMessage<span style="font-weight: bold;">(</span>повідомлення,
+заголовок<span style="font-weight: bold;">)
+</span>drScrolledMessageDialog автоматично відображає трасування, якщо воно існує.
+</p>
+<hr>
+<p>Щоб дозволити користувачеві додавати елементи до контекстного меню, використовуйте
+<tt>AddPluginPopUpMenuFunction</tt>.
+</p>
+<pre><span style="font-weight: bold;">AddPluginPopUpMenuFunction</span>(НазваПоточногоПлагіна, МіткаФункції, ФункціяЯкуВиХочетеДодати)<br></pre>
+<p>
+НазваПоточногоПлагіна є зрозумілою.
+</p>
+<p>
+Це дозволить користувачеві через діалогове вікно контекстного меню додати функцію доповнення до контекстного меню (з міткою <i>МіткаФункції</i>).
+</p>
+<p>
+Примітки: Якщо ви видаляєте плагін, вам потрібно вручну видалити елемент зі списку контекстного меню через діалогове вікно контекстного меню.
+</p>
+<p>
+Кожен елемент доповнення в контекстному меню завантажується лише тоді, коли цей доповнення завантажений. Тому, якщо доповнення завантажується через індекс, коли ви завантажуєте плагін, відповідний елемент з'явиться у контекстному меню. Навіть якщо доповнення не завантажений, елемент залишається у списку контекстного меню.
+</p>
+<hr>
+<p>Щоб дозволити користувачеві додавати елементи до панелі інструментів, використовуйте
+<tt>AddPluginToolBarFunction</tt>.
+</p>
+<pre><span style="font-weight: bold;">AddPluginToolBarFunction</span>(МіткаФункції, ФункціяЯкуВиХочетеДодати)<br></pre>
+<p>
+Це дозволить користувачеві через діалогове вікно налаштування панелі інструментів додати функцію доповнення до панелі інструментів (з міткою <i>МіткаФункції</i>).
+</p>
+<p>
+Примітки: Якщо ви видаляєте плагін, вам потрібно вручну видалити елемент зі списку панелі інструментів через діалогове вікно панелі інструментів.
+</p>
+<p>
+Кожен елемент доповнення на панелі інструментів завантажується незалежно від усього, тому обов'язково видаліть запис, якщо ви видаляєте доповнення (інакше нічого не станеться, коли ви натиснете кнопку).
+</p>
+<p>
+Щоб встановити піктограми, у вас є два варіанти. Перший — написати скрипт встановлення, який встановлює піктограми на жорсткий диск користувача, а потім додає записи для кожної піктограми у файл даних користувацьких піктограм у каталозі налаштувань DrPython.
+</p>
+<p>
+Інший варіант — дозволити користувачеві вручну встановити піктограми.
+</p>
+<p>
+Щоб додати записи, ви можете зробити це вручну або використовувати вбудовані функції.
+</p>
+<pre><span style="font-weight: bold;">AddPluginIcon</span>(Мітка, РозташуванняФайлу16x16, РозташуванняФайлу24x24)<br></pre>
+<pre><span style="font-weight: bold;">RemovePluginIcon</span>(Мітка)<br></pre>
+<p>
+Ось приклад.
+</p>
+<pre>plugindir = DrFrame.GetPluginsDirectory()<br>DrFrame.AddPluginIcon<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 102, 0);">"Find In Files"</span>, <span
+ style="color: rgb(0, 102, 0);">""</span>,<span
+ style="font-weight: bold;"> </span><span style="color: rgb(0, 102, 0);"><span
+ style="color: rgb(0, 0, 0);">plugindir + </span>"/bitmaps/24/Find In Files.png"</span><span
+ style="font-weight: bold;">)</span>
+</pre>
+<p>
+Припускаючи, що ви скопіювали файл піктограми у відповідне місце (у цьому випадку, у каталозі доповнення 
+<tt>plugindir/bitmaps/24/</tt>), це додасть запис у файл даних користувацьких піктограм, т
+ак що якщо панель інструментів налаштована на розмір 24x24 і користувач додає елемент "Знайти у файлах",
+ буде відображено іконку "Find In Files.png". Цю функцію найкраще викликати у скрипті <tt>.install</tt>.
+</p>
+<p>
+<tt>RemovePluginIcon</tt> найкраще викликати у функції <tt>Uninstall</tt>, і вона видалить
+ відповідний запис із файлу даних користувацьких піктограм.
+</p>
+<pre>DrFrame.RemovePluginIcon<span style="font-weight: bold;">(</span><span
+ style="color: rgb(0, 102, 0);">"Знайти у файлах"<span
+ style="font-weight: bold; color: rgb(0, 0, 0);">)</span></span>
+</pre>
+<p>
+Примітка: <tt>AddPluginIcon</tt> перезапише будь-які записи у файлі даних користувацьких піктограм
+ з такою самою міткою.
+</p>
+<hr>
+<p>Якщо ви хочете встановити та завантажити налаштування у вашому доповненні, все,
+ що вам потрібно зробити для редагування цих налаштувань, — це визначити функцію.
+</p>
+<hr>
+<p>Якщо ви хочете встановити та завантажити параметри у своєму доповненні, усе вам
+потрібно зробити
+для редагування цих параметрів необхідно визначити функцію.
+</p>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">OnPreferences<span
+ style="font-weight: bold;"><span style="color: rgb(0, 0, 0);">(</span></span><span
+ style="color: rgb(0, 0, 0);">DrFrame</span><span
+ style="font-weight: bold;"><span style="color: rgb(0, 0, 0);">)</span></span><span
+ style="color: rgb(0, 0, 0);">:<br></span></span></pre>
+<p>
+Ця функція буде викликана (з DrFrame як аргумент) з
+меню Налаштування. Ви можете створити власне діалогове вікно налаштувань і запустити його
+з цієї функції.
+</p>
+<hr>
+<p>Якщо ви хочете мати діалогове вікно «Про програму» або діалогове вікно «Довідка», використовуйте:
+</p>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">OnAbout<span style="font-weight: bold;"><span
+ style="color: rgb(0, 0, 0);">(</span></span><span
+ style="color: rgb(0, 0, 0);">DrFrame</span><span
+ style="font-weight: bold;"><span style="color: rgb(0, 0, 0);">)</span></span><span
+ style="color: rgb(0, 0, 0);">:</span></span>
+</pre>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">OnHelp<span style="font-weight: bold;"><span
+ style="color: rgb(0, 0, 0);">(</span></span><span
+ style="color: rgb(0, 0, 0);">DrFrame</span><span
+ style="font-weight: bold;"><span style="color: rgb(0, 0, 0);">)</span></span><span
+ style="color: rgb(0, 0, 0);">:<br></span></span></pre>
+<p>
+Ця функція буде викликана (з DrFrame як аргумент) з
+Меню довідки.
+Ви можете створити власне діалогове вікно та запустити його за допомогою цієї функції.
+</p>
+<hr>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">AddPluginOnCloseFunction</span><span
+ style="font-weight: bold;">(</span>pluginname, function<span
+ style="font-weight: bold;">)</span>:<br></pre>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">AddPluginOnNewFunction</span><span
+ style="font-weight: bold;">(</span>pluginname, function, RunOnLoad<span
+ style="font-weight: bold;">)</span>:<br></pre>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">AddPluginOpenFileFunction</span><span
+ style="font-weight: bold;">(</span>pluginname, function, RunFirst<span
+ style="font-weight: bold;">)</span>:<br></pre>
+<pre><span style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">AddPluginSaveFileFunction</span><span
+ style="font-weight: bold;">(</span>pluginname, function, RunFirst<span
+ style="font-weight: bold;">)</span>:<br></pre>
+<p>
+Ці функції дозволяють вам виконувати код, коли файл відкривається або зберігається, а також коли створюється або закривається новий документ.
+</p>
+<p>
+Функції <tt>OnClose</tt> та <tt>OnNew</tt> повинні приймати один аргумент, яким є DrFrame. Функції доповнення <tt>OnClose</tt> та <tt>OnNew</tt> виконуються в кінці DrFrame.OnClose та DrFrame.OnNew.
+</p>
+<p>
+Функція <tt>RunOnLoad</tt> виконує код для функції On New доповнення, коли воно завантажується.
+</p>
+<p>
+<i><b>Примітка: Якщо доповнення виконує код у <tt>OnNew</tt>, настійно рекомендується, щоб доповнення завантажувалося за замовчуванням, а не через індекс. Інакше можуть виникнути певні складнощі, якщо кілька документів відкриті під час завантаження доповнення (однак ви завжди можете обробити це у коді вашого плагіна).</b></i></p>
+<p>
+Функції <tt>OpenFile</tt> та <tt>SaveFile</tt> повинні приймати два аргументи: перший — це DrFrame, а другий — ім'я файлу.
+</p>
+<p>
+Останній аргумент визначає, чи буде код виконуватися на початку чи в кінці (за замовчуванням) <tt>DrFrame.OpenFile</tt> та <tt>DrFrame.SaveFile</tt>.
+</p>
+<hr>
+<h2>Додавання панелей</h2>
+<p>
+Хочете створити панель для доступу з головного вікна? Ось як виглядає код для створення панелі.
+</p>
+<pre>if self.txtDocument.SourceBrowser is None:<br>
+    target, i = self.currentpage.GetTargetSashWindow(self.prefs.sourcebrowserpanel)<br>
+    self.txtDocument.SourceBrowser = drSourceBrowserPanel(target, -1, self.prefs.sourcebrowserpanel, i)<br>
+        self.currentpage.OnSize(None)<br>else:<br>    if not self.currentpage.IsVisible(self.txtDocument.SourceBrowser.Position, self.txtDocument.SourceBrowser.Index):<br>        self.txtDocument.SourceBrowser.Browse()<br>    self.currentpage.TogglePanel(self.txtDocument.SourceBrowser.Position, self.txtDocument.SourceBrowser.Index)<br></pre>
+<p>
+Тепер є кілька важливих речей, на які слід звернути увагу.
+</p>
+<ol>
+  <li> <tt>GetTargetSashWindow</tt> приймає один аргумент — позицію (0 = Ліворуч, 1 = Праворуч, 2 = Вгорі, 3 = Внизу). </li>
+  <li> <tt>GetTargetSashWindow</tt> повертає саме вікно (батьківський елемент панелі, яку ви створюєте) та індекс. Індекс та позиція (Ліворуч, Праворуч, Вгорі, Внизу) — це те, як ви отримуєте доступ до конкретної панелі. У цьому випадку останні два аргументи для <tt>drSourceBrowserPanel</tt> — це позиція та індекс. </li>
+  <li> Після створення нової панелі потрібно викликати <tt>OnSize</tt> (<tt>OnSize</tt> приймає один аргумент — подію, яку слід встановити на None). </li>
+  <li> У вас є два варіанти для перемикання панелі.
+    <ol style="list-style-type: upper-alpha;">
+      <li> Просто викличте <tt>TogglePanel(Position, Index)</tt>. </li>
+      <li> Викличте <tt>ShowPanel(Position, Index, ShowThePanel)</tt> (ShowThePanel — це булеве значення). </li>
+    </ol>
+Якщо ви виберете B, ви можете використовувати <tt>IsVisible(Position, Index)</tt>, щоб визначити, чи відображається панель. У цьому випадку, якщо панель буде показана, DrPython оновлює Source Browser. </li>
+</ol>
+<p>
+Ось код для знищення панелі.
+</p>
+<pre>def OnbtnClose(self, event):<br>    self.parent.txtDocument.SourceBrowser = None<br>    self.panelparent.ClosePanel(self.Position, self.Index)<br></pre>
+<p>
+<tt>ClosePanel(Position, Index)</tt> повністю знищить панель, тому будь-який код після цього може викликати проблеми. Це робить виклик <tt>ClosePanel</tt> з коду, який викликається більше одного разу (наприклад, <tt>wx.EVT_SIZE</tt>), поганою ідеєю.
+</p>
+<p>
+Також зверніть увагу, що змінна SourceBrowser тут встановлена на None. Закриття панелі не робить цього автоматично, тому якщо ви використовуєте значення змінної, яка містить панель у вашому коді, обов'язково встановіть її на None перед знищенням самої панелі.
+</p>
+<p>
+Повний код можна знайти у коді SourceBrowser у ядрі DrPython.
+</p>
+<hr>
+<h2>Скрипти встановлення/видалення</h2>
+<p>
+DrPython надає метод для автоматичного виконання скриптів встановлення.
+</p>
+<p>
+Якщо у вас є доповнення з назвою <tt>example.py</tt>, файл з назвою <tt>example.py.install</tt> у тому самому каталозі буде автоматично запущено під час встановлення.
+</p>
+<h3>Скрипт встановлення</h3>
+<p>
+Скрипт встановлення особливо корисний, якщо у вас є файли, які ви хочете встановити у певне місце на жорсткому диску користувача (наприклад, зображення для панелі інструментів).
+</p>
+<p>
+Ось приклад.
+</p>
+<pre><span style="color: rgb(51, 153, 153); font-style: italic;">#Example<br>Plugin Install Script<br>#This file is called "example.py.install"</span>
+
+<span style="font-weight: bold;">import</span> wx, shutil, os, os.path<br><br><span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">Install</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br>    d = wx.MessageDialog<span
+ style="font-weight: bold;">(</span>DrFrame, <span
+ style="color: rgb(0, 102, 0);">"This will install some bitmaps for the Example plugin.\nAre you sure you want to proceed?"</span>,<br>        <span
+ style="color: rgb(0, 102, 0);">"Install Search In Files"</span>,<br>        wx.YES_NO | wx.ICON_QUESTION<span
+ style="font-weight: bold;">)</span>
+    answer = d.ShowModal<span
+ style="font-weight: bold;">()</span>
+    d.Destroy<span
+ style="font-weight: bold;">()</span>
+    if <span
+ style="font-weight: bold;">(</span>answer == wx.ID_YES<span
+ style="font-weight: bold;">)</span>:<br>        cwd = os.getcwd<span
+ style="font-weight: bold;">()</span>
+        plugindir = DrFrame.GetPluginsDirectory<span
+ style="font-weight: bold;">()</span>
+        if not os.path.exists<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps"</span><span
+ style="font-weight: bold;">)</span>:<br>            os.mkdir<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps"</span><span
+ style="font-weight: bold;">)</span>
+        if not os.path.exists<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16"</span><span
+ style="font-weight: bold;">)</span>:<br>            os.mkdir<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16"</span><span
+ style="font-weight: bold;">)</span>
+        if not os.path.exists<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/24"</span><span
+ style="font-weight: bold;">)</span>:<br>            os.mkdir<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/24"</span><span
+ style="font-weight: bold;">)</span>
+
+        shutil.copyfile<span
+ style="font-weight: bold;">(</span>cwd + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16/Example.png"</span>, plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16/Example.png"</span><span
+ style="font-weight: bold;">)</span>
+        shutil.copyfile<span
+ style="font-weight: bold;">(</span>cwd + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/24/Example.png"</span>, plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/24/Example.png"</span><span
+ style="font-weight: bold;">)</span>
+
+        DrFrame.AddPluginIcon<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 102, 0);">"Example"</span>, plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16/Example.png"</span>,<span
+ style="font-weight: bold;"> </span><span style="color: rgb(0, 102, 0);"><span
+ style="color: rgb(0, 0, 0);">plugindir + </span>"/bitmaps/24/Example.png"</span><span
+ style="font-weight: bold;">)</span>
+
+    <span
+ style="font-weight: bold;">return</span> True<br></pre>
+<p>
+Зверніть увагу на вказівку return. Вона визначає поведінку після завершення роботи скрипту
+ встановлення вашого доповнення. Якщо ви повертаєте <tt>True</tt>, DrPython продовжить встановлення доповнення.
+Це добре, якщо ви просто хочете встановити деякі зображення, але в іншому випадку хочете,
+ щоб DrPython обробив решту.
+</p>
+<p>
+Повернення <tt>False</tt> призведе до зупинки встановлення доповнення DrPython. 
+Це корисно, якщо ви хочете дозволити користувачеві скасувати встановлення 
+або якщо ви хочете вручну встановити доповнення самостійно. 
+Також зверніть увагу на <tt>GetPluginsDirectory()</tt>. 
+Ця функція повертає каталог користувача, де зберігаються доповнення після їх встановлення.
+</p>
+<h3>Скрипт видалення</h3>
+<p>
+Якщо ви хочете певної поведінки під час видалення, 
+напишіть метод у вашому файлі доповнення під назвою <tt>UnInstall</tt>.
+</p>
+<pre><span style="color: rgb(51, 153, 153); font-style: italic;">#Example Plugin</span>
+
+<span style="font-weight: bold;">import</span> wx, os, os.path<br><br><span
+ style="font-weight: bold;">def </span><span
+ style="color: rgb(255, 0, 0);">UnInstall</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br>    plugindir = DrFrame.GetPluginsDirectory<span
+ style="font-weight: bold;">()</span>
+    if os.path.exists<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16/Example.png"</span><span
+ style="font-weight: bold;">)</span>:<br>        os.remove<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/16/Example.png"</span><span
+ style="font-weight: bold;">)</span>
+    if os.path.exists<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/24/Example.png"</span><span
+ style="font-weight: bold;">)</span>:<br>        os.remove<span
+ style="font-weight: bold;">(</span>plugindir + <span
+ style="color: rgb(0, 102, 0);">"/bitmaps/24/Example.png"</span><span
+ style="font-weight: bold;">)</span>
+
+    DrFrame.RemovePluginIcon<span
+ style="font-weight: bold;">(</span><span style="color: rgb(0, 102, 0);">"Example"</span><span
+ style="font-weight: bold;">)</span>
+
+    <span
+ style="font-weight: bold;">return</span> True<br><br><span
+ style="font-weight: bold;">def</span> <span
+ style="color: rgb(255, 0, 0);">Plugin</span><span
+ style="font-weight: bold;">(</span>DrFrame<span
+ style="font-weight: bold;">)</span>:<br>    yadda yadda yadda...<br></pre>
+<p>
+Знову зверніть увагу на повернення. <tt>UnInstall</tt> має використовувати DrFrame як
+тільки як
+аргумент. Якщо ця функція повертає <tt>True</tt>, drPython продовжить
+процес видалення. Якщо функція повертає <tt>False</tt>,
+drPython зупинить видалення.
+</p>
+<p>
+</p>
+<hr>
+<h2>Корисні методи<br>
+</h2>
+<p>Ось кілька корисних методів і їхні дії:<br>
+(Усі вони є описані в DrFrame)<br>
+</p>
+<pre><span style="font-weight: bold;">Ask</span>(question, title='DrPython')<br></pre>
+<p>
+</p>
+Задає питання з відповіддю «так» або «ні» з необов’язковою назвою.<br>
+Повертає True, якщо користувач вибирає «Так»,<br>
+В іншому випадку False.<br>
+<pre><span style="font-weight: bold;">Execute</span>(command, statustext='')<br></pre>
+<p>
+</p>
+Виконує необроблену команду в Консолі, відображаючи необов’язковий текст стану.<br>
+<pre><span style="font-weight: bold;">ExecutePython</span>()<br></pre>
+<p>
+</p>
+Запускає інтерпретатор Python у підказці.<br>
+<pre><span style="font-weight: bold;">ExecuteWithPython</span>(command, statustext='', pythonargs='')<br></pre>
+<p>
+</p>
+Виконує команду як аргумент для python у Консолі, відображаючи
+необов'язковий текст стану,<br>
+з використанням необов’язкових додаткових аргументів для інтерпретатора python (у
+на додаток до встановлених у налаштуваннях).<br>
+<p></p>
+<pre><span style="font-weight: bold;">GetActiveSTC</span>()<br></pre>
+<p>
+</p>
+<p>Повертає активний елемент керування стилізованим текстом (Документ або Консоль).<br>
+</p>
+<pre><span style="font-weight: bold;">GetAlreadyOpen</span>()<br></pre>
+<p>
+</p>
+Повертає кортеж імен файлів кожного відкритого документа.<br>
+<pre><span style="font-weight: bold;">GetNewId</span>()<br></pre>
+<p>
+</p>
+Повертає новий ідентифікатор wx, переконавшись, що значення не знаходиться поблизу
+константи, які використовує drPython.<br>
+<pre><span style="font-weight: bold;">GetPluginsDirectory</span>()<br></pre>
+<p>
+</p>
+Повертає каталог, де зберігаються доповнення користувача.
+<pre><span style="font-weight: bold;">GetPluginMenuLabel</span>(plugin, functionlabel, menulabel='')<br></pre>
+<p>
+</p>
+Спочатку потрібно додати пункти меню за допомогою (DrFrame.AddPluginFunction або
+DrFrame.AddPluginShortcutFunction).<br>
+Потім скористайтеся DrFrame.LoadShortcuts(plugin).<br>
+Під час виклику цієї функції вона повертає правильно відформатоване меню, 
+що включає відповідні пункти.<br>
+<br>
+'plugin' – це назва плагіна.&nbsp; 'functionlabel' — це мітка
+наведена в 'AddPluginFunction'.<br>
+'menulabel' (необов'язково) дозволяє вказати конкретний пункт для додавання<br>
+<pre><span style="font-weight: bold;">GetPreference</span>(pref, key=None)<br></pre>
+<p>
+</p>
+Повертає значення параметра "pref", використовуючи необов'язковий ключ "key".<br>
+pref має бути рядком.<br>
+ключ має бути або рядком, або цілим числом.<br>
+<pre><span style="font-weight: bold;">GetPreferencesDirectory</span>()<br></pre>
+<p>
+</p>
+Повертає каталог, де зберігаються налаштування користувача, пунктів  
+меню, параметри панелі інструментів тощо.
+<pre><span style="font-weight: bold;">LoadPluginShortcuts</span>(plugin)<br></pre>
+<p>
+</p>
+Якщо це викликається в доповненні - завантажить пункти меню (корисно
+якщо<br>
+потрібно отримати мітки для відображення в меню).<br>
+<br>
+В іншому випадку автоматично викликається під час ініціалізації плагіна.<br>
+<br>
+Його можна викликати лише один раз для кожного плагіна.<br>
+<pre><span style="font-weight: bold;">ShowMessage</span>(msg, title='drPython')<br></pre>
+<p>
+</p>
+Показує повідомлення з необов’язковою назвою.&nbsp; Якщо є
+відстеження помилок,<br>
+показує їх також.<br>
+<pre><span style="font-weight: bold;">ShowPrompt</span>(Visible=True)<br></pre>
+<p>
+</p>
+Показує або приховує Консоль.<br>
+<pre><span style="font-weight: bold;">ViewURLInBrowser</span>(url)<br></pre>
+<p>
+</p>
+Показує URL-адресу в браузері за умовчанням, указаному в параметрах.
+<p><a href="help.html">Назад до довідки drPython</a>
+</p>
+</body>
+</html>

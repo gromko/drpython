@@ -1,0 +1,77 @@
+Version: 1.0.9 (21.01.2005), Franz Steinhaeusler: 
+  - update for wxPython 2.8 and DrPython 1.65.
+  
+Version: 1.0.8 (21.01.2005), Franz Steinhaeusler: 
+  - updated for DrPython 3.9.1
+      (replaced homedirectory with userpreferencesdirectory)
+
+Version: 1.0.7 (16.12.2004), Franz Steinhaeusler: 
+- new opton "AdjustText"
+    example: you have a file with tabs and unix line endings.
+    then you copy for instance from demo, which 
+    is on windows with crlf and spaces.
+    after paste, the file is mixed with spaces and tabs and line endings lf and crlf.
+    
+    So I made an option in copycutpasteexend.
+    It tries to accommodate to the current tab or spaces
+    and to change the text to the current line endings.
+    I called this preference "AdjustText".
+
+Version: 1.0.6 (25.11.2004), Franz Steinhaeusler:
+
+  - new: MultiClipBoard (works only with copy/cut special/append and copywordundercursor and pastealternative)
+  - new: able to save Multiple Clip Entries
+  - new: CopyCurrentWord
+  - new: show and select one entry from the Multiple Clipboard (Listbox)
+  - added to preferences: Multiple Clipboard
+
+Version: 1.0.5 (04.11.2004), Franz Steinhaeusler: 
+  - improved paste from rectangular selection 
+      * show pasted text as selection again
+         (anchor in the beginning, a little circumstantial, but I think, it works)
+      * insert spaces, if line is shorter than position of pasted text
+  - less steps in undo
+
+Version: 1.0.4 (17.09.2004), Franz Steinhaeusler: 
+	- three options on paste:
+		- default (so only the rectangular paste is other)
+		- cursor stay before selected text
+		- cursor stay before selected text and the pasted text is marked
+
+Version: 1.0.3 (16.09.2004), Franz Steinhaeusler: 
+ - Option Select after paste
+ - paste "rectangular" after rectangular selection
+
+Version: 1.0.2, Franz Steinhaeusler: 
+ - Added Popup function
+
+Version: 1.0.1, Franz Steinhaeusler:			
+	- removed Clear alternative copy/cut/paste keys
+	- no global variables, new DrFrame member variables in form of DrFrame.<PluginNme>_var
+	- used drScrolledMessageDialog
+	- cleared some old comments
+
+Version: 1.0.0, Franz Steinhaeusler:
+Initial Version:
+
+
+===========================================================================================
+
+Five functions: 
+	Copy Line, 
+	Cut Line, 
+	Copy Append, 
+	Cut Append, 
+	Alternative Paste with three options 
+		- default
+		- cursor stays in front of pasted text
+		- cursor stays in front of pasted text and is selected
+
+Three Preferences: 
+	Put cursor to first row after line copy/cut,
+	Copy whole line in copy/cut append,
+	Alternative Paste
+      
+Please refer to help or CopyCutPasteExtend_readme.txt for more information.
+
+	

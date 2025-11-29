@@ -1,0 +1,36 @@
+.. DrPython documentation master file, created by
+   sphinx-quickstart on Sat Aug 28 11:05:48 2010.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to DrPython's documentation!
+====================================
+
+:Author: Daniel Pozmanter
+:Contact: drpython@bluebottle.com
+:Web site: http://drpython.sourceforge.net/
+:Copyright: 2003-2010 Daniel Pozmanter
+:License: :ref:`gpl`
+
+Contents:
+
+.. toctree::
+    :maxdepth: 2
+   
+    help
+    preferences
+    drscript
+    plugins
+    credits
+    thanks
+    License <gpl>
+    northstar
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
